@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components{
+  .btn {
+      @apply bg-purple text-primary active:bg-deep-purple-500 font-bold text-lg px-6 py-3 rounded-lg shadow hover:shadow-lg mr-1 mb-1 cursor-pointer border border-purple hover:bg-primary hover:text-purple;
+  }
+}
+
 body{
   font-family: Inter, sans-serif;
   color: white;
