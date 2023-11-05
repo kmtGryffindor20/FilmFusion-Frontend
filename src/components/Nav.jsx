@@ -4,39 +4,34 @@ import { useEffect, useState, useRef } from "react";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react"
 import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 import MovieList from "./MovieList";
+import LoginModal from "./LoginModal";
 
-export default function Nav() {
+export default function Nav(props) {
 
     const [search, setSearch] = useState("")
+
+    const [formData, setFormData] = useState({})
+
+    const [shouldRegister, setShouldRegister] = useState(false)
+
+    const [registerOrLogin, setRegisterOrLogin] = useState("Login")
+
 
     function handleChange(event){
         setSearch(event.target.value)
     }
 
-    // useEffect(() => {
-
-    //     async function getData(){
-    //         const options = {
-    //             "method":"GET",
-    //         }
-    //         const response = await fetch(`https://kmtgryffindor20.pythonanywhere.com/api/movies/search/${search}`, options)
-    //         const this_data = await response.json()
-    //         console.log(this_data)
-    //         setResults(this_data['results'])
-    //     }
-    //     if (shouldSearch){
-    //         getData();
-    //         setShouldSearch(false)
-    //     }
-    // }
-    // , [shouldSearch])
+    
 
 
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isRegisterOpen, onOpen: onRegisterOpen, onClose: onRegisterClose } = useDisclosure()
 
     const initialRef = useRef(null)
     const finalRef = useRef(null)
+    const initialRefRegister = useRef(null)
+    const finalRefRegister = useRef(null)
 
     return (
         <>
@@ -51,9 +46,9 @@ export default function Nav() {
                 </div>
                 <div>
                     <ul className="flex items-center text-white">
-                        <li className="px-5">Trending</li>
-                        <li className="px-5">Recommended</li>
-                        <li className="px-5">Login</li>
+                        <li className="px-5 cursor-pointer"><a href="#Explore">Trending</a></li>
+                        <li className="px-5 cursor-pointer">Recommended</li>
+                        <li onClick={onRegisterOpen} className="px-5 cursor-pointer" >{props.loggedIn?"User":"Login"}</li>
                     </ul>
                 </div> 
             </nav>
@@ -70,7 +65,7 @@ export default function Nav() {
         <ModalContent  bg={"primary"}>
           <ModalHeader textColor={"white"}>Search for Movies</ModalHeader>
           <ModalCloseButton color={"white"} />
-          <ModalBody pb={6}>
+          <ModalBody  pb={6}>
             <FormControl>
               <FormLabel textColor={"white"}>Search</FormLabel>
               <Input onChange={handleChange} className="border-purple text-white" ref={initialRef} placeholder='Search a movie' />
@@ -82,6 +77,15 @@ export default function Nav() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <LoginModal initialRefRegister={initialRefRegister}
+                  finalRefRegister={finalRefRegister}
+                  isRegisterOpen={isRegisterOpen}
+                  onClose={onRegisterClose}
+                  setLoggedIn={props.setLoggedIn}
+                  setToken={props.setToken} />
+
+      
 
         </>
     )
