@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, FormControl, FormLabel, Input } from "@chakra-ui/react"
 import { useDisclosure } from "@chakra-ui/react"
+import { Spinner } from "@chakra-ui/react"
 
 export default function LoginModal(props) {
     const [formData, setFormData] = useState({})
@@ -72,6 +73,7 @@ export default function LoginModal(props) {
       if (shouldRegister  && registerOrLogin==="Login"){
         login()
         setShouldRegister(false)
+        props.onClose()
       }
     },[shouldRegister])
   
@@ -79,18 +81,25 @@ export default function LoginModal(props) {
     function handleSubmit(){
       setShouldRegister(true)
     }
-  
+    
+    var spinner = null
     if (registerOrLogin==="Login"){
       try{
         if (loginResponse["token"]){
           props.setLoggedIn(true)
           props.setToken(loginResponse["token"])
           props.setUsername(loginResponse["username"])
-          props.onRegisterClose()
+          props.onClose()
         }
       }
       catch{
-        console.log("error")
+        spinner = <Spinner
+        thickness='4px'
+        speed='0.65s'
+        emptyColor='gray.200'
+        color='blue.500'
+        size='xl'
+      />
       }
     }
 
@@ -136,6 +145,8 @@ export default function LoginModal(props) {
             {registerOrLogin==="Register" ? "Register" : "Login"}
           </a>
           <a className="btn bg-white border-white hover:text-white" onClick={props.onClose}>Cancel</a>
+      {spinner}
+
         </ModalFooter>
       </ModalContent>
     </Modal>

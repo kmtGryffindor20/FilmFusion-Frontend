@@ -11,12 +11,6 @@ export default function Nav(props) {
 
     const [search, setSearch] = useState("")
 
-    const [formData, setFormData] = useState({})
-
-    const [shouldRegister, setShouldRegister] = useState(false)
-
-    const [registerOrLogin, setRegisterOrLogin] = useState("Login")
-
 
     function handleChange(event){
         setSearch(event.target.value)

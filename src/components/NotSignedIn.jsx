@@ -22,7 +22,9 @@ export default function NotSignedIn(props){
                   isRegisterOpen={isRegisterOpen}
                   onClose={onRegisterClose}
                   setLoggedIn={props.setLoggedIn}
-                  setToken={props.setToken} />
+                  setToken={props.setToken}
+                  setUsername={props.setUsername}
+                   />
         </>
     );
 }

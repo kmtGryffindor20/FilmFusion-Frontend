@@ -50,7 +50,9 @@ export default function MovieList(props){
                         id={movie.id}
                         token={props.token}
                         loggedIn={props.loggedIn}
-                        setLoggedIn={props.setLoggedIn} setToken={props.setToken} />
+                        setLoggedIn={props.setLoggedIn} setToken={props.setToken}
+                        setUsername={props.setUsername}
+                         />
             )
             
         }

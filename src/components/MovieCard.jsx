@@ -207,11 +207,9 @@ export default function MovieCard(props) {
           isOpen={isReviewOpen}
           onClose={onReviewClose}
           loggedIn={props.loggedIn}
-          initialRefRegister={initialRefRegister}
-          finalRefRegister={finalRefRegister}
-          isRegisterOpen={isRegisterOpen}
-          onRegisterClose={onRegisterClose}
-          onRegisterOpen={onRegisterOpen}
+          setToken={props.setToken}
+          setLoggedIn={props.setLoggedIn}
+          setUsername={props.setUsername}
           />
 
       <LoginModal initialRefRegister={initialRefRegister}
@@ -224,7 +222,13 @@ export default function MovieCard(props) {
                   isShowOpen={isShowOpen}
                   onShowClose={onShowClose}
                   title={props.title}
-                  />
+                  id={props.id}
+                  loggedIn={props.loggedIn}
+                  token={props.token}
+                  setLoggedIn={props.setLoggedIn}
+                  setToken={props.setToken}
+                  setUsername={props.setUsername}
+            />
     </>
 
   );
