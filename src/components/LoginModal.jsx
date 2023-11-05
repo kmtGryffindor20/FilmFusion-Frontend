@@ -85,6 +85,7 @@ export default function LoginModal(props) {
         if (loginResponse["token"]){
           props.setLoggedIn(true)
           props.setToken(loginResponse["token"])
+          props.setUsername(loginResponse["username"])
           props.onRegisterClose()
         }
       }

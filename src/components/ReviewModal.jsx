@@ -1,29 +1,107 @@
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react"
+import { useState } from "react"
+import { useEffect } from "react"
 import "./rating.css"
-export default function Rating(props){
+import LoginModal from "./LoginModal"
+import Review from "./Review"
+export default function ReviewModal(props){
+
+     // set rating as per stars selected
+     const [rating, setRating] = useState(0)
+     function handleRatingChange(event){
+         setRating(event.target.id.split("-")[1])
+     }
+
+
+     const [review, setReview] = useState("")
+     const [allReviews, setAllReviews] = useState([{}])
+     const [submitReview, setSubmitReview] = useState(false)
+   
+     // useEffect for getting and posting reviews
+     useEffect(() => {
+       async function getData(){
+         const response = await fetch(`https://kmtgryffindor20.pythonanywhere.com/api/movies/reviews/${props.id}/`)
+         const this_data = await response.json()
+         setAllReviews(this_data["results"])
+       }
+         getData();
+     }, [props.id, submitReview])
+   
+     useEffect(() => {
+       async function postData(){
+         const options = {
+           "method":"POST",
+           "headers": {
+             "Authorization": `Bearer ${props.token}`,
+             "Content-Type": "application/json"
+           },
+           "body": JSON.stringify({
+             "review_text": review,
+             "rating": rating,
+           })
+         }
+         const response = await fetch(`https://kmtgryffindor20.pythonanywhere.com/api/movies/reviews/${props.id}/`, options)
+         const this_data = await response.json()
+            console.log(this_data)
+         setSubmitReview(false)
+       }
+   
+       if (review, rating, submitReview){
+         postData()
+       }
+     }, [review, rating, submitReview])
+   
+     function handleReviewChange(event){
+       setReview(event.target.value)
+     }
+
+     console.log(review);
+
+ var reviews = null;
+ try {
+    reviews = allReviews.map((review)=>
+    <Review review={review.review_text}
+            rating={review.rating}
+            username={review.username}
+            date={review.review_date}/>
+    )
+ } catch (error) {
+    
+ }
+    
 
     return (
-        <div class="container bg-primary text-white">
+        <>
+        <Modal
+        isOpen={props.isOpen}
+        onClose={props.onClose}
+        size={"2xl"}
+      >
+        <ModalOverlay />
+        <ModalContent bg={"primary"} textColor={"white"}>
+          <ModalHeader>Give your review!</ModalHeader>
+          <div class="container bg-primary text-white">
         <div class="feedback">
             <div class="rating">
-            <input type="radio" name="rating" id="rating-10"/>
+            <input onClick={handleRatingChange} type="radio" name="rating" id="rating-10"/>
             <label for="rating-10"></label>
-            <input type="radio" name="rating" id="rating-9"/>
+            <input onClick={handleRatingChange} type="radio" name="rating" id="rating-9"/>
             <label for="rating-9"></label>
-            <input type="radio" name="rating" id="rating-8"/>
+            <input onClick={handleRatingChange} type="radio" name="rating" id="rating-8"/>
             <label for="rating-8"></label>
-            <input type="radio" name="rating" id="rating-7"/>
+            <input onClick={handleRatingChange} type="radio" name="rating" id="rating-7"/>
             <label for="rating-7"></label>
-            <input type="radio" name="rating" id="rating-6"/>
+            <input onClick={handleRatingChange} type="radio" name="rating" id="rating-6"/>
             <label for="rating-6"></label>
-            <input type="radio" name="rating" id="rating-5"/>
+            <input onClick={handleRatingChange} type="radio" name="rating" id="rating-5"/>
             <label for="rating-5"></label>
-            <input type="radio" name="rating" id="rating-4"/>
+            <input onClick={handleRatingChange} type="radio" name="rating" id="rating-4"/>
             <label for="rating-4"></label>
-            <input type="radio" name="rating" id="rating-3"/>
+            <input onClick={handleRatingChange} type="radio" name="rating" id="rating-3"/>
             <label for="rating-3"></label>
-            <input type="radio" name="rating" id="rating-2"/>
+            <input onClick={handleRatingChange} type="radio" name="rating" id="rating-2"/>
             <label for="rating-2"></label>
-            <input type="radio" name="rating" id="rating-1"/>
+            <input onClick={handleRatingChange} type="radio" name="rating" id="rating-1"/>
             <label for="rating-1"></label>
 
             <div class="emoji-wrapper">
@@ -116,6 +194,17 @@ export default function Rating(props){
             </div>
         </div>
 </div>
-    )
+        <div>
+        {reviews}
+        </div>
+        
+          <textarea onChange={handleReviewChange} className="bg-secondary mx-4 mb-8 rounded-2xl border-white border-2 indent-4 py-4" placeholder="Write your review here" name="" id="" cols="30" rows="10"></textarea>
+          {props.loggedIn && <a className="btn w-max mx-4" onClick={()=>setSubmitReview(true)}>Submit</a>}
+            {!props.loggedIn && <a className="btn w-max mx-4" onClick={props.onRegisterOpen}>Submit</a>}
+        </ModalContent>
+    </Modal>
 
+    <LoginModal initialRefRegister={props.initialRefRegister} finalRefRegister={props.finalRefRegister} isOpen={props.isRegisterOpen} onClose={props.onRegisterClose} onOpen={props.onRegisterOpen} />
+        </>
+    )
 }

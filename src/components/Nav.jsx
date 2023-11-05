@@ -5,6 +5,7 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody,
 import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 import MovieList from "./MovieList";
 import LoginModal from "./LoginModal";
+import { Avatar, Wrap, WrapItem } from "@chakra-ui/react"
 
 export default function Nav(props) {
 
@@ -48,7 +49,12 @@ export default function Nav(props) {
                     <ul className="flex items-center text-white">
                         <li className="px-5 cursor-pointer"><a href="#Explore">Trending</a></li>
                         <li className="px-5 cursor-pointer">Recommended</li>
-                        <li onClick={onRegisterOpen} className="px-5 cursor-pointer" >{props.loggedIn?"User":"Login"}</li>
+                        <li onClick={onRegisterOpen} className="px-5 cursor-pointer" >{props.loggedIn?props.username:"Login"}</li>
+                        {props.loggedIn && <Wrap>
+                                            <WrapItem>
+                                                <Avatar name={props.username} src='' />
+                                            </WrapItem>
+                                           </Wrap>}
                     </ul>
                 </div> 
             </nav>
@@ -83,7 +89,8 @@ export default function Nav(props) {
                   isRegisterOpen={isRegisterOpen}
                   onClose={onRegisterClose}
                   setLoggedIn={props.setLoggedIn}
-                  setToken={props.setToken} />
+                  setToken={props.setToken}
+                  setUsername={props.setUsername} />
 
       
 

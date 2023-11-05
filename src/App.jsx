@@ -10,11 +10,13 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false)
 
   const [token, setToken] = useState("")
+
+  const [username, setUsername] = useState("")
   
 
   return (
     <>
-      <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} setToken={setToken} />
+      <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} setToken={setToken} username={username} setUsername={setUsername} />
       <MovieCarousel/>
       <Heading title="What will you watch?" />
       <BulletHeading title="Your Watchlist"/>

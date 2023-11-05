@@ -9,7 +9,6 @@ import {
 } from "@material-tailwind/react";
 
 import { useRef } from "react";
-import Rating from "./Rating";
 import { useDisclosure } from "@chakra-ui/react"
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react"
 import star from "../assets/images/star-filled.png"
@@ -17,13 +16,14 @@ import star_empty from "../assets/images/star-empty.png"
 
 import { useEffect, useState } from "react";
 import LoginModal from "./LoginModal";
+import ReviewModal from "./ReviewModal";
+import ShowtimesModal from "./ShowtimesModal";
 
 export default function MovieCard(props) {
   var uri = `https://api.themoviedb.org/3/movie/${props.api_id}/images`
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { isOpen: isReviewOpen, onOpen: onReviewOpen, onClose: onReviewClose } = useDisclosure()
 
 
   const [cast, setCast] = useState([])
@@ -108,49 +108,7 @@ export default function MovieCard(props) {
   }, [props.id, props.api_id, props.title])
 
 
-  const [review, setReview] = useState("")
-  const [allReviews, setAllReviews] = useState([{}])
-  const [rating, setRating] = useState(0)
-  const [submitReview, setSubmitReview] = useState(false)
-
-  // useEffect for getting and posting reviews
-  useEffect(() => {
-    async function getData(){
-      const response = await fetch(`https://kmtgryffindor20.pythonanywhere.com/api/movies/reviews/${props.id}/`)
-      const this_data = await response.json()
-      console.log(this_data)
-      setAllReviews(this_data["results"])
-    }
-      getData();
-  }, [props.id, props.api_id, props.title])
-
-  useEffect(() => {
-    async function postData(){
-      const options = {
-        "method":"POST",
-        "headers": {
-          "Authorization": `Bearer ${props.token}`,
-          "Content-Type": "application/json"
-        },
-        "body": JSON.stringify({
-          "review_text": review,
-          "rating": rating,
-        })
-      }
-      const response = await fetch(`https://kmtgryffindor20.pythonanywhere.com/api/movies/reviews/${props.id}`, options)
-      const this_data = await response.json()
-      console.log(this_data)
-      setSubmitReview(false)
-    }
-
-    if (review, rating, submitReview){
-      postData()
-    }
-  }, [review, rating])
-
-  function handleReviewChange(event){
-    setReview(event.target.value)
-  }
+ 
 
 
   const genres = props.genres.split(", ")
@@ -168,6 +126,9 @@ export default function MovieCard(props) {
 
 
   const { isOpen: isRegisterOpen, onOpen: onRegisterOpen, onClose: onRegisterClose } = useDisclosure()
+  const { isOpen: isReviewOpen, onOpen: onReviewOpen, onClose: onReviewClose } = useDisclosure()
+  const { isOpen: isShowOpen, onOpen: onShowOpen, onClose: onShowClose } = useDisclosure()
+
   const initialRefRegister = useRef(null)
   const finalRefRegister = useRef(null)
 
@@ -182,7 +143,7 @@ export default function MovieCard(props) {
         <Typography variant="paragraph" className="text-white font-sans font-semibold px-2 mr-8">
           {props.rating}
         </Typography>
-        <a onClick={props.loggedIn?onReviewOpen:onRegisterOpen} className="hover:scale-125 hover:outline-2 outline-purple"><img src={star_empty} alt="" /></a>
+       <a onClick={onReviewOpen} className="hover:scale-125 hover:outline-2 outline-purple"><img src={star_empty} alt="" /></a>
       </CardBody>
       <CardBody className="text-left py-1">
         <Typography variant="h6" className="mb-2 cursor-pointer text-white" onClick={onOpen}>
@@ -190,7 +151,9 @@ export default function MovieCard(props) {
         </Typography>
       </CardBody>
       <CardFooter className="flex justify-center gap-7 relative mb-2 mt-auto">
-      <a className="btn py-2 content-center text-base" onClick={props.loggedIn ? onRegisterOpen : ()=>setSendMovie(true)}>{props.btnText}</a>
+      {props.btnText === "Showtimes" && <a className="btn py-2 content-center text-base" onClick={onShowOpen}>{props.btnText}</a>} 
+      {props.loggedIn && props.btnText!="Showtimes" && <a className="btn py-2 content-center text-base" onClick={()=>setSendMovie(true)}>{props.btnText}</a>}
+      {!props.loggedIn && props.btnText!="Showtimes" && <a className="btn py-2 content-center text-base" onClick={onRegisterOpen}>{props.btnText}</a>}
       </CardFooter>
     </Card>
 
@@ -223,7 +186,6 @@ export default function MovieCard(props) {
                 </div>
               </div>
               <div>
-              <a className="btn hover:bg-transparent">Add to Watchlist</a>
               </div>
            <iframe
                 className="h-[40rem] w-full mt-8"
@@ -239,19 +201,18 @@ export default function MovieCard(props) {
       </ModalContent>
     </Modal>
 
-    <Modal
-        isOpen={isReviewOpen}
-        onClose={onReviewClose}
-        size={"2xl"}
-      >
-        <ModalOverlay />
-        <ModalContent bg={"primary"} textColor={"white"}>
-          <ModalHeader>Give your review!</ModalHeader>
-          <Rating />
-          <textarea onChange={handleReviewChange} className="bg-secondary mx-4 mb-8 rounded-2xl border-white border-2 indent-4 py-4" placeholder="Write your review here" name="" id="" cols="30" rows="10"></textarea>
-          <a className="btn w-max mx-4" onClick={()=>setSubmitReview(true)}>Submit</a>
-        </ModalContent>
-      </Modal>
+    <ReviewModal 
+          id={props.id}
+          token={props.token}
+          isOpen={isReviewOpen}
+          onClose={onReviewClose}
+          loggedIn={props.loggedIn}
+          initialRefRegister={initialRefRegister}
+          finalRefRegister={finalRefRegister}
+          isRegisterOpen={isRegisterOpen}
+          onRegisterClose={onRegisterClose}
+          onRegisterOpen={onRegisterOpen}
+          />
 
       <LoginModal initialRefRegister={initialRefRegister}
                   finalRefRegister={finalRefRegister}
@@ -259,6 +220,12 @@ export default function MovieCard(props) {
                   onClose={onRegisterClose}
                   setLoggedIn={props.setLoggedIn}
                   setToken={props.setToken} />
+    <ShowtimesModal 
+                  isShowOpen={isShowOpen}
+                  onShowClose={onShowClose}
+                  title={props.title}
+                  />
     </>
+
   );
 }
