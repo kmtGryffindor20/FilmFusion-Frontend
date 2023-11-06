@@ -10,7 +10,7 @@ export default function LoginModal(props) {
     const [loginResponse, setLoginResponse] = useState([{}])
     const [registerOrLogin, setRegisterOrLogin] = useState("Login")
     const [shouldRegister, setShouldRegister] = useState(false)
-
+    const [alertType, setAlertType] = useState("success")
     const {
         isOpen: isVisible,
         onClose,
@@ -80,8 +80,20 @@ export default function LoginModal(props) {
       if (shouldRegister  && registerOrLogin==="Login"){
         login()
         setShouldRegister(false)
-        props.onClose()
-        onOpen()
+        
+        if (loginResponse["token"]){
+          setAlertType("success")
+          props.onClose()
+          onOpen()
+        }
+        else{
+          setAlertType("error")
+          props.onClose()
+          onOpen()
+        }
+        
+        
+        
       }
     },[shouldRegister])
   
@@ -162,12 +174,12 @@ export default function LoginModal(props) {
       </ModalContent>
     </Modal>
 
-    {isVisible && <Alert status='success'>
+    {isVisible && <Alert status={alertType}>
       <AlertIcon />
       <Box>
-        <AlertTitle>Logged In!</AlertTitle>
+        <AlertTitle>{alertType==="success"?"Logged In!":"Something was wrong!"}</AlertTitle>
         <AlertDescription>
-          Successfully Logged In!
+        {alertType==="success"?"Logged In Successfully!":"Incorrect Username or Password"}
         </AlertDescription>
       </Box>
       <CloseButton
