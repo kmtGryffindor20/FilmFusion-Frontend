@@ -183,9 +183,9 @@ export default function MovieCard(props) {
       </CardBody>
       <CardFooter className="flex justify-center gap-7 relative mb-2 mt-auto">
       {props.btnText === "Showtimes" && <a className="btn py-2 content-center text-base" onClick={onShowOpen}>{props.btnText}</a>} 
-      {props.btnText === "Know More" && <a className="btn py-2 content-center text-base" onClick={onOpen}>{props.btnText}</a>}
+      {(props.btnText === "Know More" || props.btnText === "Explore") && <a className="btn py-2 content-center text-base" onClick={onOpen}>{props.btnText}</a>}
       {props.btnText === "Remove" && <a className="btn py-2 content-center text-base" onClick={()=>{setShouldDelete(true)}}>{props.btnText}</a>}
-      {localStorage.getItem('loggedIn') && props.btnText!="Showtimes" && props.btnText!=="Know More" && props.btnText!=="Remove" && <a className="btn py-2 content-center text-base" onClick={()=>setSendMovie(true)}>{props.btnText}</a>}
+      {localStorage.getItem('loggedIn') && props.btnText!="Showtimes" && props.btnText!=="Know More" && props.btnText!=="Explore" && props.btnText!=="Remove" && <a className="btn py-2 content-center text-base" onClick={()=>setSendMovie(true)}>{props.btnText}</a>}
       {!localStorage.getItem('loggedIn') && props.btnText!="Showtimes" && <a className="btn py-2 content-center text-base" onClick={onRegisterOpen}>{props.btnText}</a>}
       </CardFooter>
     </Card>
