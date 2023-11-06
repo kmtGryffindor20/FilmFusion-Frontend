@@ -141,9 +141,11 @@ export default function MovieCard(props) {
 
   const genres = props.genres.split(", ")
 
+
+  // add key to cast list
   try{
     var cast_list = cast.slice(0, 4).map((person) => (
-      <div className="flex flex-row items-center">
+      <div key={person['id']} className="flex flex-row items-center">
         <a className="text-white underline">{person['actor_name']}</a>
       </div>
     ))
@@ -202,7 +204,7 @@ export default function MovieCard(props) {
               <div>
               <ul className="flex mt-8 mb-8">
                 {genres.map((genre) => (
-                  <li className="border-2 border-white rounded-full px-2 text-center mr-4">{genre}</li>
+                  <li key={genre} className="border-2 border-white rounded-full px-2 text-center mr-4">{genre}</li>
                 ))}
               </ul>
               </div>

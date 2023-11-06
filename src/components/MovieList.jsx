@@ -78,7 +78,9 @@ export default function MovieList(props){
                         loggedIn={props.loggedIn}
                         setLoggedIn={props.setLoggedIn} setToken={props.setToken}
                         setUsername={props.setUsername}
+                        key = {movie.id}
                          />
+            
             )
             
         }

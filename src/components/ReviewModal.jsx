@@ -62,10 +62,12 @@ export default function ReviewModal(props){
  var reviews = null;
  try {
     reviews = allReviews.map((review)=>
-    <Review review={review.review_text}
+    <Review key={review['id']}
+            review={review.review_text}
             rating={review.rating}
             username={review.username}
-            date={review.review_date}/>
+            date={review.review_date}
+            />
     )
  } catch (error) {
     

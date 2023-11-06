@@ -106,7 +106,7 @@ export default function ShowtimesModal(props){
     }
 
     var shows = showtimes.map((show) => (
-        <div id={show} onClick={selectShowtime} className="w-24 mr-2 indent-3 h-8 bg-transparent border-gray-400 text-gray-400 border-2 mb-1 hover:text-black hover:bg-gray-400 rounded-md cursor-pointer">{show} </div>
+        <div key={show_to_index[show]} id={show} onClick={selectShowtime} className="w-24 mr-2 indent-3 h-8 bg-transparent border-gray-400 text-gray-400 border-2 mb-1 hover:text-black hover:bg-gray-400 rounded-md cursor-pointer">{show} </div>
     ))
 
     const [bookTicket, setBookTicket] = useState(false)
@@ -127,11 +127,9 @@ export default function ShowtimesModal(props){
                     "price": 200
                 })
             }
-            console.log(options["body"])
             const response = await fetch(`https://kmtgryffindor20.pythonanywhere.com/api/tickets/create/`, options)
             const this_data = await response.json()
             setTicketId(this_data["ticket_id"])
-            console.log(this_data)
         }
         if (bookTicket){
             getData()
