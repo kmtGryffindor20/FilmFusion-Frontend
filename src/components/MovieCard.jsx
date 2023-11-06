@@ -54,11 +54,11 @@ export default function MovieCard(props) {
       const this_data = await response.json()
       console.log(this_data)
       setSendMovie(false)
+      location.reload()
     }
     
     if (sendMovie){
       postData()
-      location.reload()
     }
 
   },[sendMovie])
