@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, FormControl, FormLabel, Input } from "@chakra-ui/react"
 import { useDisclosure } from "@chakra-ui/react"
 import { Spinner } from "@chakra-ui/react"
+import { Alert, AlertIcon, AlertTitle, AlertDescription, CloseButton, Box } from '@chakra-ui/react'
+
 
 export default function LoginModal(props) {
     const [formData, setFormData] = useState({})
@@ -9,6 +11,11 @@ export default function LoginModal(props) {
     const [registerOrLogin, setRegisterOrLogin] = useState("Login")
     const [shouldRegister, setShouldRegister] = useState(false)
 
+    const {
+        isOpen: isVisible,
+        onClose,
+        onOpen,
+      } = useDisclosure({ defaultIsOpen: false })
 
     function handleLoginFormChange(event){
         setFormData((prev)=>{
@@ -74,6 +81,7 @@ export default function LoginModal(props) {
         login()
         setShouldRegister(false)
         props.onClose()
+        onOpen()
       }
     },[shouldRegister])
   
@@ -89,7 +97,9 @@ export default function LoginModal(props) {
           props.setLoggedIn(true)
           props.setToken(loginResponse["token"])
           props.setUsername(loginResponse["username"])
+          props.setEmail(loginResponse["email"])
           props.onClose()
+
         }
       }
       catch{
@@ -105,7 +115,8 @@ export default function LoginModal(props) {
 
 
     return(
-      <Modal
+    <>
+    <Modal
       initialFocusRef={props.initialRefRegister}
       finalFocusRef={props.finalRefRegister}
       isOpen={props.isRegisterOpen}
@@ -114,7 +125,7 @@ export default function LoginModal(props) {
     >
       <ModalOverlay />
       <ModalContent  bg={"primary"}>
-        <ModalHeader textColor={"white"}>Register</ModalHeader>
+        <ModalHeader textColor={"white"}>{registerOrLogin==="Register"?"Register":"Login"}</ModalHeader>
         <ModalBody pb={6}>
             <ModalCloseButton color={"white"} />
           <FormControl>
@@ -150,5 +161,24 @@ export default function LoginModal(props) {
         </ModalFooter>
       </ModalContent>
     </Modal>
+
+    {isVisible && <Alert status='success'>
+      <AlertIcon />
+      <Box>
+        <AlertTitle>Logged In!</AlertTitle>
+        <AlertDescription>
+          Successfully Logged In!
+        </AlertDescription>
+      </Box>
+      <CloseButton
+        alignSelf='flex-start'
+        position='relative'
+        right={-1}
+        top={-1}
+        onClick={onClose}
+      />
+    </Alert>}
+    </>
+      
     )
 }

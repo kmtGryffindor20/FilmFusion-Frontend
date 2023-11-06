@@ -2,7 +2,8 @@ import { Avatar, Wrap, WrapItem } from "@chakra-ui/react"
 export default function Review(props){
     return(
         // return a review card with stars, date,  username, and review
-        <div className="flex flex-col px-8 py-4 bg-secondary my-4 mx-8 rounded justify-start">
+        <div className="flex flex-col px-8 py-4 bg-secondary my-4 mx-8 justify-start w-full rounded-md">
+            {props.title && <h3 className="text-white font-sans text-2xl">{props.title}</h3>}
             <Wrap>
                 <WrapItem>
                     <Avatar name={props.username} src='https://bit.ly/tioluwani-kolawole' />

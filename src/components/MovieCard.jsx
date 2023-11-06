@@ -108,6 +108,34 @@ export default function MovieCard(props) {
   }, [props.id, props.api_id, props.title])
 
 
+  const [shouldDelete, setShouldDelete] = useState(false)
+  // useEffect for delete movie from watchlist
+  const deleteURI = `https://kmtgryffindor20.pythonanywhere.com/api/users/watchlist/delete/${props.id}`
+  useEffect(() => {
+
+    async function deleteData(){
+      const options = {
+        "method":"DELETE",
+        "headers": {
+          "Authorization": `Bearer ${localStorage.getItem('token')}`,
+          "Content-Type": "application/json"
+        }
+      }
+      const response = await fetch(deleteURI, options)
+      const this_data = await response.json()
+      location.reload()
+
+      console.log(this_data)
+    }
+
+    if (props.btnText === "Remove" && shouldDelete){
+      deleteData()
+      setShouldDelete(false)
+    }
+
+  },[shouldDelete])
+
+
  
 
 
@@ -152,8 +180,10 @@ export default function MovieCard(props) {
       </CardBody>
       <CardFooter className="flex justify-center gap-7 relative mb-2 mt-auto">
       {props.btnText === "Showtimes" && <a className="btn py-2 content-center text-base" onClick={onShowOpen}>{props.btnText}</a>} 
-      {props.loggedIn && props.btnText!="Showtimes" && <a className="btn py-2 content-center text-base" onClick={()=>setSendMovie(true)}>{props.btnText}</a>}
-      {!props.loggedIn && props.btnText!="Showtimes" && <a className="btn py-2 content-center text-base" onClick={onRegisterOpen}>{props.btnText}</a>}
+      {props.btnText === "Know More" && <a className="btn py-2 content-center text-base" onClick={onOpen}>{props.btnText}</a>}
+      {props.btnText === "Remove" && <a className="btn py-2 content-center text-base" onClick={()=>{setShouldDelete(true)}}>{props.btnText}</a>}
+      {localStorage.getItem('loggedIn') && props.btnText!="Showtimes" && props.btnText!=="Know More" && props.btnText!=="Remove" && <a className="btn py-2 content-center text-base" onClick={()=>setSendMovie(true)}>{props.btnText}</a>}
+      {!localStorage.getItem('loggedIn') && props.btnText!="Showtimes" && <a className="btn py-2 content-center text-base" onClick={onRegisterOpen}>{props.btnText}</a>}
       </CardFooter>
     </Card>
 
@@ -163,7 +193,7 @@ export default function MovieCard(props) {
       <ModalContent style={{backgroundImage: `url(${bg_image_url})`, backdropFilter: 'blur(10px)'}} bgSize="cover">
         <div className="z-0" style={{backgroundColor: 'rgba(0, 0, 0, 0.6)', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}></div>
         <ModalHeader zIndex={1} fontSize={"7xl"} textColor={"white"}>{props.title}</ModalHeader>
-        <ModalCloseButton zIndex={1} />
+        <ModalCloseButton color={"white"} zIndex={1} />
         <ModalBody className="flex mr-0" textColor={"white"} zIndex={1} fontSize={"xl"} justifyContent={"left"}>
            <div className="flex flex-col">
             <div className="w-1/2">

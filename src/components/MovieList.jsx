@@ -1,14 +1,26 @@
 import MovieCard from "./MovieCard";
 import { useState, useEffect } from "react";
 import { Spinner } from "@chakra-ui/react"
+import { useDisclosure } from "@chakra-ui/react"
+
 export default function MovieList(props){
 
     const [list, setList] = useState([])
+    let movies = null;
+
+    const [loading, setLoading] = useState(true)
+
+
+    const {
+        isOpen: isVisible,
+        onClose,
+        onOpen,
+      } = useDisclosure({ defaultIsOpen: false })
 
     useEffect(() => {
-        async function getData(){
+        function getData(){
             var options = {}
-            if (props.URI.includes("users")) {
+            if (props.URI.includes("users") || props.URI.includes("recommendations")) {
                 options = {
                     "method":"GET",
                     "headers": {
@@ -25,10 +37,16 @@ export default function MovieList(props){
                     }
                 }
             }
-            const response = await fetch(props.URI, options)
-            const this_data = await response.json()
+            // use fetch to get data from the URI and use spinner while loading
+            fetch(props.URI, options)
+            .then(response => response.json())
+            .then(data => {
+                setList(data['results'])
+            })
+            .catch(error => {
+            })
+            .finally(() => setLoading(false))
 
-            setList(this_data['results'])
             
         }
         
@@ -37,7 +55,15 @@ export default function MovieList(props){
         }
     }, [props.URI])
 
-    let movies = null;
+
+    const spinner = <Spinner 
+    thickness='4px'
+    speed='0.65s'
+    emptyColor='gray.200'
+    color='blue.500'
+    size='xl'
+    />
+
     try{
         movies = list.map((movie)=>
             <MovieCard rating={movie.tmdb_rating}
@@ -57,20 +83,38 @@ export default function MovieList(props){
             
         }
         catch {
-            movies = <Spinner
-            thickness='4px'
-            speed='0.65s'
-            emptyColor='gray.200'
-            color='blue.500'
-            size='xl'
-          />
-        }
+            if(props.URI.includes("users")){
+                movies = <h1 className="text-white text-2xl text-center">No movies in your watchlist</h1>
+            }
+            else {
+                movies = <h1 className="text-white text-2xl text-center">No movies in this category</h1>
+            }
+            }
+        
 
     return(
         <>
         <div id={props.text} className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 ml-24 mt-8 mb-8 mr-24">
+        {loading && spinner}
         {movies}
         </div>
+
+        {isVisible && <Alert status='error'>
+      <AlertIcon />
+      <Box>
+        <AlertTitle>Movie Not Found</AlertTitle>
+        <AlertDescription>
+          No movie with this name
+        </AlertDescription>
+      </Box>
+      <CloseButton
+        alignSelf='flex-start'
+        position='relative'
+        right={-1}
+        top={-1}
+        onClick={onClose}
+      />
+    </Alert>}
         
         </>
     );
