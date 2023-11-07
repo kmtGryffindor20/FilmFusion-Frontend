@@ -22,16 +22,16 @@ export default function ProfileModal(props) {
           <ModalBody className="flex items-center"  pb={6}>
           <Wrap>
             <WrapItem>
-                <Avatar className="" size='2xl' name={props.username} src='' />
+                <Avatar className="" size='2xl' name={localStorage.getItem('username')} src='' />
             </WrapItem>
-            <h1 className="text-5xl text-white text-center mt-4 ml-4">{props.username}</h1>
-            <h5 className="text-xl text-white text-center mt-8 ml-4">{props.email}</h5>
+            <h1 className="text-5xl text-white text-center mt-4 ml-4">{localStorage.getItem('username')}</h1>
+            <h5 className="text-xl text-white text-center mt-8 ml-4">{localStorage.getItem('email')}</h5>
         </Wrap>
           </ModalBody>
 
           <ModalFooter className="flex flex-col">
             <h3 className="text-xl text-white">Your Watchlist</h3>
-            <MovieList URI={`https://kmtgryffindor20.pythonanywhere.com/api/users/watchlist/`} token={props.token} text="Remove" />
+            <MovieList URI={`https://kmtgryffindor20.pythonanywhere.com/api/users/watchlist/`} text="Remove" />
           </ModalFooter>
         </ModalContent>
       </Modal>

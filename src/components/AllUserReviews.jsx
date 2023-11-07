@@ -18,7 +18,7 @@ export default function AllUserReviews(props) {
                 "method":"GET",
 
                 "headers": {
-                    "Authorization": `Bearer ${props.token}`,
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`,
                     "Content-Type": "application/json"
                 }
             }
@@ -28,7 +28,7 @@ export default function AllUserReviews(props) {
         }
         getData()
     }
-    ,[reviews, props.token])
+    ,[reviews, localStorage.getItem('token')])
 
     var review_list = null
     try{

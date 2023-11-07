@@ -35,7 +35,7 @@ export default function ReviewModal(props){
          const options = {
            "method":"POST",
            "headers": {
-             "Authorization": `Bearer ${props.token}`,
+             "Authorization": `Bearer ${localStorage.getItem('token')}`,
              "Content-Type": "application/json"
            },
            "body": JSON.stringify({
@@ -207,8 +207,8 @@ export default function ReviewModal(props){
         </div>
         
           <textarea onChange={handleReviewChange} className="bg-secondary mx-4 mb-8 rounded-2xl border-white border-2 indent-4 py-4" placeholder="Write your review here" name="" id="" cols="30" rows="10"></textarea>
-          {props.loggedIn && <a className="btn w-max mx-4" onClick={()=>setSubmitReview(true)}>Submit</a>}
-            {!props.loggedIn && <a className="btn w-max mx-4" onClick={onRegisterOpen}>Submit</a>}
+          {localStorage.getItem('loggedIn') && <a className="btn w-max mx-4" onClick={()=>setSubmitReview(true)}>Submit</a>}
+            {!localStorage.getItem('loggedIn') && <a className="btn w-max mx-4" onClick={onRegisterOpen}>Submit</a>}
         </ModalContent>
     </Modal>
 
@@ -216,9 +216,7 @@ export default function ReviewModal(props){
                   finalRefRegister={finalRefRegister}
                   isRegisterOpen={isRegisterOpen}
                   onClose={onRegisterClose}
-                  setLoggedIn={props.setLoggedIn}
-                  setToken={props.setToken}
-                  setUsername={props.setUsername} />
+                  />
 
                    
         </>

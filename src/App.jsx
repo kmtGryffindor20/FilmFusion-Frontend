@@ -16,11 +16,6 @@ function App() {
 
   const [email, setEmail] = useState(localStorage.getItem("email"))
 
-  localStorage.setItem("loggedIn", loggedIn)
-  localStorage.setItem("token", token)
-  localStorage.setItem("username", username)
-  localStorage.setItem("email", email)
-
 
   useEffect(()=>{
     

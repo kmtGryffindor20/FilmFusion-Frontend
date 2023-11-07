@@ -12,7 +12,7 @@ export default function RecommendedModal(props) {
           <ModalHeader className="text-center text-white bg-primary">Recommended Movies</ModalHeader>
           <ModalCloseButton />
           <ModalBody className="bg-primary items-center flex flex-col">
-            <MovieList URI={`https://kmtgryffindor20.pythonanywhere.com/api/movies/recommendations/`} token={props.token} text="Add" />
+            <MovieList URI={`https://kmtgryffindor20.pythonanywhere.com/api/movies/recommendations/`} text="Watchlist +" />
           </ModalBody>
           <ModalFooter className="bg-primary">
           </ModalFooter>

@@ -39,10 +39,8 @@ export default function Nav(props) {
     const finalRefRegister = useRef(null)
 
     function Logout(){
-        props.setLoggedIn(false)
-        props.setToken("")
-        props.setUsername("")
-        console.log(props.username);
+        localStorage.clear();
+        location.reload();
     }
 
 
@@ -59,13 +57,13 @@ export default function Nav(props) {
                 </div>
                 <div>
                     <ul className="flex items-center text-white">
-                        <li onClick={onRegisterOpen} className="px-5 cursor-pointer" >{props.loggedIn?props.username:"Login"}</li>
+                        <li onClick={onRegisterOpen} className="px-5 cursor-pointer" >{localStorage.getItem('loggedIn')? localStorage.getItem('username'):"Login"}</li>
                         
                       <Menu>
                         <MenuButton>
-                        {props.loggedIn && <Wrap>
+                        {localStorage.getItem('loggedIn')&& <Wrap>
                                             <WrapItem>
-                                                <Avatar name={props.username} src='' />
+                                                <Avatar name={localStorage.getItem('username')} src='' />
                                             </WrapItem>
                                            </Wrap>}
                         </MenuButton>
@@ -112,37 +110,21 @@ export default function Nav(props) {
                   finalRefRegister={finalRefRegister}
                   isRegisterOpen={isRegisterOpen}
                   onClose={onRegisterClose}
-                  setLoggedIn={props.setLoggedIn}
-                  setToken={props.setToken}
-                  setUsername={props.setUsername}
-                  setEmail={props.setEmail}
                   />
 
       <ProfileModal isOpen={isProfileOpen}
                     onClose={onProfileClose}
-                    username={props.username}
-                    token={props.token}
-                    setToken={props.setToken}
-                    setLoggedIn={props.setLoggedIn}
-                    setUsername={props.setUsername}
-                    email={props.email}
                      />
 
         <TicketsModal isOpen={isTicketsOpen}
                       onClose={onTicketsClose}
-                      token={props.token}
-                      username={props.username}
                       />
 
         <AllUserReviews isOpen={isReviewOpen}
                         onClose={onReviewClose}
-                        token={props.token}
-                        username={props.username}
                         />
         <RecommendedModal isOpen={isRecommendOpen}
                           onClose={onRecommendClose}
-                          token={props.token}
-                          username={props.username}
                           />
       
 

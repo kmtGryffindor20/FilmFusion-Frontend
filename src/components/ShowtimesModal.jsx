@@ -118,7 +118,7 @@ export default function ShowtimesModal(props){
                 "method":"POST",
                 "headers": {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${props.token}`
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`
                 },
                 "body": JSON.stringify({
                     "movie": props.id,
@@ -167,10 +167,10 @@ export default function ShowtimesModal(props){
           </ModalBody>
   
           <ModalFooter>
-            {props.loggedIn && <a onClick={()=>{setBookTicket(true)}} className="btn">
+            {localStorage.getItem('loggedIn') && <a onClick={()=>{setBookTicket(true)}} className="btn">
               Book
             </a>}
-            {!props.loggedIn && <a onClick={onRegisterOpen} className="btn">
+            {!localStorage.getItem('loggedIn') && <a onClick={onRegisterOpen} className="btn">
               Login to Book Tickets
 
             </a>}
@@ -183,9 +183,7 @@ export default function ShowtimesModal(props){
                   finalRefRegister={finalRefRegister}
                   isRegisterOpen={isRegisterOpen}
                   onClose={onRegisterClose}
-                  setLoggedIn={props.setLoggedIn}
-                  setToken={props.setToken}
-                  setUsername={props.setUsername} />
+                 />
 
         <Ticket id={ticketId} isOpen={isTicketOpen} onClose={onTicketClose} title={props.title} showtime={selectedShowtime} seat={selectedSeat} />
 

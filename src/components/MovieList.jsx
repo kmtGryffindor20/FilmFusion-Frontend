@@ -24,7 +24,7 @@ export default function MovieList(props){
                 options = {
                     "method":"GET",
                     "headers": {
-                        "Authorization": `Bearer ${props.token}`,
+                        "Authorization": `Bearer ${localStorage.getItem('token')}`,
                         "Content-Type": "application/json"
                     }
                 }
@@ -74,10 +74,6 @@ export default function MovieList(props){
                         genres={movie.genre}
                         director={movie.director_name} 
                         id={movie.id}
-                        token={props.token}
-                        loggedIn={props.loggedIn}
-                        setLoggedIn={props.setLoggedIn} setToken={props.setToken}
-                        setUsername={props.setUsername}
                         key = {movie.id}
                          />
             

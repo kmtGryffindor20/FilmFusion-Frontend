@@ -48,6 +48,16 @@ export default function LoginModal(props) {
         const response = await fetch(registerURI, options)
         const this_data = await response.json()
         console.log(this_data)
+        if (response.status === 400) {
+          setAlertType("error")
+          props.onClose()
+          onOpen()
+        }
+        else if (response.status === 201){
+          setAlertType("success")
+          props.onClose()
+          onOpen()
+        }
       }
       if (shouldRegister && registerOrLogin==="Register"){
         register()
@@ -76,6 +86,11 @@ export default function LoginModal(props) {
         const this_data = await response.json()
         console.log(this_data)
         setLoginResponse(this_data)
+        if (response.status === 400) {
+          setAlertType("error")
+          props.onClose()
+          onOpen()
+        }
       }
       if (shouldRegister  && registerOrLogin==="Login"){
         login()
@@ -86,11 +101,7 @@ export default function LoginModal(props) {
           props.onClose()
           onOpen()
         }
-        else{
-          setAlertType("error")
-          props.onClose()
-          onOpen()
-        }
+        
         
         
         
@@ -106,11 +117,12 @@ export default function LoginModal(props) {
     if (registerOrLogin==="Login"){
       try{
         if (loginResponse["token"]){
-          props.setLoggedIn(true)
-          props.setToken(loginResponse["token"])
-          props.setUsername(loginResponse["username"])
-          props.setEmail(loginResponse["email"])
+          localStorage.setItem('loggedIn', true)
+          localStorage.setItem('token', loginResponse["token"])
+          localStorage.setItem('username', formData.username)
+          localStorage.setItem('email', loginResponse["email"])
           props.onClose()
+          location.reload();
 
         }
       }
@@ -142,26 +154,28 @@ export default function LoginModal(props) {
             <ModalCloseButton color={"white"} />
           <FormControl>
             <FormLabel textColor={"white"}>Username</FormLabel>
-            <Input className="border-purple text-white" ref={props.initialRefRegister} name="username" placeholder='Username' onChange={handleLoginFormChange} />
+            <Input className="border-purple text-white" ref={props.initialRefRegister} name="username" placeholder='Username' onChange={handleLoginFormChange} value={formData.username || ''} />
           </FormControl>
           {registerOrLogin=="Register" && <FormControl mt={4}>
             <FormLabel textColor={"white"}>Email</FormLabel>
-            <Input className="border-purple text-white" name="email" placeholder='Email' onChange={handleLoginFormChange} />
+            <Input className="border-purple text-white" name="email" placeholder='Email' onChange={handleLoginFormChange} value={formData.email || ''} />
           </FormControl>}
           <FormControl mt={4}>
             <FormLabel textColor={"white"}>Password</FormLabel>
-            <Input type="password" className="border-purple text-white" name="password" placeholder='Password' onChange={handleLoginFormChange} />
+            <Input type="password" className="border-purple text-white" name="password" placeholder='Password' onChange={handleLoginFormChange} value={formData.password || ''}/>
           </FormControl>
         </ModalBody>
 
         <ModalFooter>
           <a className="btn" onClick={()=>{setRegisterOrLogin((prev)=>{
+            setFormData({})
             if (prev === "Login"){
               return "Register"
             }
             else{
               return "Login"
             }
+            // empty form data
           })}}>{registerOrLogin==="Register"?"Login":"Register"} Instead</a>
 
           <a onClick={handleSubmit}  className="btn">
@@ -177,9 +191,9 @@ export default function LoginModal(props) {
     {isVisible && <Alert status={alertType}>
       <AlertIcon />
       <Box>
-        <AlertTitle>{alertType==="success"?"Logged In!":"Something was wrong!"}</AlertTitle>
+        <AlertTitle>{(alertType==="success" ? (registerOrLogin==="Register"?"Registered!":"Logged In!"):"Error" )}</AlertTitle>
         <AlertDescription>
-        {alertType==="success"?"Logged In Successfully!":"Incorrect Username or Password"}
+        {(alertType==="success" ? (registerOrLogin==="Register"?"You have been registered successfully!":"You have been logged in successfully!"):"There was an error. Please try again." )}
         </AlertDescription>
       </Box>
       <CloseButton

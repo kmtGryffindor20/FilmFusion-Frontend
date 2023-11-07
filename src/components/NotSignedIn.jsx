@@ -21,9 +21,6 @@ export default function NotSignedIn(props){
                   finalRefRegister={finalRefRegister}
                   isRegisterOpen={isRegisterOpen}
                   onClose={onRegisterClose}
-                  setLoggedIn={props.setLoggedIn}
-                  setToken={props.setToken}
-                  setUsername={props.setUsername}
                    />
         </>
     );

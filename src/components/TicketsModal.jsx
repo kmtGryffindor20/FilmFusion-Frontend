@@ -25,7 +25,7 @@ export default function TicketsModal(props) {
                 "method":"GET",
 
                 "headers": {
-                    "Authorization": `Bearer ${props.token}`,
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`,
                     "Content-Type": "application/json"
                 }
             }

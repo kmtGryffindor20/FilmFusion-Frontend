@@ -39,11 +39,10 @@ export default function MovieCard(props) {
   useEffect(() => {
 
     async function postData(){
-      console.log(props.token);
       const options = {
         "method":"POST",
         "headers": {
-          "Authorization": `Bearer ${props.token}`,
+          "Authorization": `Bearer ${localStorage.getItem('token')}`,
           "Content-Type": "application/json"
         },
         "body": JSON.stringify({
@@ -236,31 +235,20 @@ export default function MovieCard(props) {
 
     <ReviewModal 
           id={props.id}
-          token={props.token}
           isOpen={isReviewOpen}
           onClose={onReviewClose}
-          loggedIn={props.loggedIn}
-          setToken={props.setToken}
-          setLoggedIn={props.setLoggedIn}
-          setUsername={props.setUsername}
           />
 
       <LoginModal initialRefRegister={initialRefRegister}
                   finalRefRegister={finalRefRegister}
                   isRegisterOpen={isRegisterOpen}
                   onClose={onRegisterClose}
-                  setLoggedIn={props.setLoggedIn}
-                  setToken={props.setToken} />
+               />
     <ShowtimesModal 
                   isShowOpen={isShowOpen}
                   onShowClose={onShowClose}
                   title={props.title}
                   id={props.id}
-                  loggedIn={props.loggedIn}
-                  token={props.token}
-                  setLoggedIn={props.setLoggedIn}
-                  setToken={props.setToken}
-                  setUsername={props.setUsername}
             />
     </>
 
