@@ -48,6 +48,7 @@ function App() {
 
   return (
     <>
+      
       <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} token={token}  setToken={setToken} username={username} setUsername={setUsername} 
             email={email} setEmail={setEmail} />
       <MovieCarousel/>
@@ -79,7 +80,9 @@ function App() {
                   setUsername={setUsername}
                   setEmail={setEmail}
                   />
+      
       <BulletHeading title="In Theaters" />
+      
       <MovieList URI="https://kmtgryffindor20.pythonanywhere.com/api/movies/in_theaters/"
                   text="Showtimes"
                   token={token}
@@ -88,8 +91,6 @@ function App() {
                   setUsername={setUsername}
                   setEmail={setEmail}
                   />
-
-      
     </>
   )
 }
