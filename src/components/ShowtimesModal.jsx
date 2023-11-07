@@ -85,6 +85,9 @@ export default function ShowtimesModal(props){
             document.getElementById(showtimes[i]).classList = "w-24 mr-2 indent-3 h-8 bg-transparent border-gray-400 text-gray-400 border-2 mb-1 hover:text-black hover:bg-gray-400 rounded-md cursor-pointer"
         }
         event.target.classList = "w-24 mr-2 indent-3 h-8 bg-gray-400 border-gray-400 text-black border-2 mb-1 hover:text-black hover:bg-gray-400 rounded-md cursor-pointer"
+        // remove selected seat and reset available seats
+        setSelectedSeat("")
+
 
     }
 
@@ -127,15 +130,21 @@ export default function ShowtimesModal(props){
                     "price": 200
                 })
             }
-            const response = await fetch(`https://kmtgryffindor20.pythonanywhere.com/api/tickets/create/`, options)
-            const this_data = await response.json()
-            setTicketId(this_data["ticket_id"])
+            // book only if showtime and seat is selected
+            if (selectedShowtime !== "" && selectedSeat !== ""){
+                const response = await fetch(`https://kmtgryffindor20.pythonanywhere.com/api/tickets/create/`, options)
+                const this_data = await response.json()
+                setTicketId(this_data["ticket_id"])
+            }
         }
         if (bookTicket){
             getData()
             setBookTicket(false)
             onRegisterClose()
+            // open ticket modal if ticket is booked
+            if (selectedSeat !== "" && selectedShowtime !== "") {
             onTicketOpen()
+            }
         }
     }
     , [bookTicket])

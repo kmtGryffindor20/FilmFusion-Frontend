@@ -18,7 +18,6 @@ export default function Ticket(props) {
           </ModalBody>
           <ModalFooter>
             <div  className="flex justify-between">
-            <a className="btn">Download</a>
             <a className="btn" onClick={props.onClose}>Close</a>
             </div>
             
